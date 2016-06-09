@@ -109,13 +109,22 @@ def finalReport():
     dfList = []
     print "\n"
     for filename in fileList:
-        print(filename + " successfully saved")
-        df = pd.read_csv(filename, header =4, encoding = 'utf-16', delimiter = '\t')
-        dfList.append(df)
+        if filename.find("Prelim") == -1:
+            df = pd.read_csv(filename, header =4, encoding = 'utf-16', delimiter = '\t')
+            dfList.append(df)
+            print(filename + " successfully saved")
+        else:
+            df = pd.read_csv(filename, header =3, encoding = 'utf-16', delimiter = '\t')
+            dfList.append(df)
+            print(filename + " successfully saved")
     concatDf = pd.concat(dfList, axis = 0)
 
 # Sort the participants by email address
     concatDf = concatDf.sort((['Email']), ascending = True)
+
+    concatDf = concatDf[['Participant','Name','Email','IP Address','Browser','Date','Invited',
+                         'Registered', 'Start time', 'End time', 'Duration',
+                         '*Attention to Duration ratio','**Attention to Attendance ratio']]
 
 # Remove the trainer's attendance details
     concatDf = concatDf[concatDf.Email != (login+'@tableau.com')]
